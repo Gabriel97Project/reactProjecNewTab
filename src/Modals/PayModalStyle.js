@@ -70,41 +70,27 @@ export const PayModalSonStyle = styled.div`
     }
 `
 
-export const ApprovedPayStyle = styled.div`
-    width:40%;
-    height: 200px;
-    background-color:white;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    h3{
-       background-color: #52527a;
-       color:white;
-       width:100%;
-       height:60px;
-       display:flex;
-       
-        align-items:center;
-        
-    }
-`
-
-
-export const DisapprovedPayStyle = styled.div`
+export const ApprovedOrReprovedPayStyle = styled.div`
     width:40%;
     height: 200px;
     background-color:red;
     display:flex;
     flex-direction:column;
     align-items:center;
+    
     h3{
        background-color: #52527a;
+       display:flex;
+        align-items:center;
        color:white;
        width:100%;
        height:60px;
        display:flex;
-       
-        
-        
+       margin:0px;
+       padding:0px;
+    };
+    .dynamicTextClass{
+        font-size:20px;
+        text-align:center;
     }
 `

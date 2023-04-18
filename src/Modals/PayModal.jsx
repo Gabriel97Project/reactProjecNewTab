@@ -1,62 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { ApprovedPayStyle, DisapprovedPayStyle, PayModalSonStyle, PayModalStyle } from "./PayModalStyle";
+import { ApprovedOrReprovedPayStyle, PayModalSonStyle, PayModalStyle } from "./PayModalStyle";
 import axios from "axios";
 
 
-
-export default function PayModal({ setModalOpen, setUserName, setUserId }) {
-    /*     let cards = [
-            // valid card
-            {
-              card_number: '1111111111111111',
-              cvv: 789,
-              expiry_date: '01/18',
-            },
-            // invalid card
-            {
-              card_number: '4111111111111234',
-              cvv: 123,
-              expiry_date: '01/20',
-            },
-          ]; */
-
-    function modalChange() {
+   /*  function modalChange() {
         setModalOpen(false)
     }
+ */
 
+export default function PayModal({ setModalOpen, setUserName, setUserId }) {
 
-    const [postApprovedData, setPostApprovedData] = useState({
+    const [moneyValueStorage, setMoneyStorageValue] = useState(0);
+  /* c */
+    const postApprovedData = {
 
-
-        // Card Info
         card_number: '1111111111111111',
         cvv: 789,
         expiry_date: '01/18',
-
-        // Destination User ID
         destination_user_id: setUserId,
+        valueMoney: moneyValueStorage,
 
-        // Value of the Transaction
-        value: 'number',
+    };
 
+    const postDisapprovedData = {
 
-    });
-    const [postDisapprovedData, setPostDisapprovedData] = useState({
-
-
-        // Card Info
         card_number: '4111111111111234',
         cvv: 123,
         expiry_date: '01/20',
-
-        // Destination User ID
         destination_user_id: setUserId,
+        valueMoney: moneyValueStorage,
 
-        // Value of the Transaction
-        valueMoney: 'number',
+    };
 
+    const [optionState, setOptionState] = useState(true);
+    const optionChangeState = () => {
+        setOptionState(current => !current);
+        /* console.log(optionState,'estadoooooooooo') */
 
-    });
+    };
 
     const handlePost = () => {
         if (optionState == true) {
@@ -78,74 +59,119 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
                 .catch(err => {
                     console.log(err);
                 });
-           /*  console.log(handlePost, 'função handle post') */
+            /*  console.log(handlePost, 'função handle post') */
         };
     };
+
+    const [disabledState, setDisabledState] = useState(true);
+  /*   const formatter = new Intl.NumberFormat('pt-BR', {
+        style: "currency",
+        currency: "BRL",
+
+    }); */
+
     const handleChange = (event) => {
-        if (optionState == true) {
+       /*  if (optionState == true) {
             setPostApprovedData({
                 ...postApprovedData,
-                [event.target.value]: event.target.value,
-                [event.target.destination_user_id]: event.target.value
+                [event.target.valueMoney]: formatter.format(moneyValueStorage).replaceAll('R$', ''),
+     
 
             });
+            setMoneyStorageValue(event.target.value)
             console.log(event, "Aprovado");
 
         }
         if (optionState == false) {
             setPostDisapprovedData({
                 ...postDisapprovedData,
-                [event.target.value]: event.target.value,
-                [event.target.destination_user_id]: event.target.value
+                [event.target.valueMoney]: formatter.format(moneyValueStorage).replaceAll('R$', ''),
+              
 
-            });
+            }); */
+            let valueMask = event.target.value;
+            valueMask = valueMask.replaceAll('.', '').replace(',', '').replaceAll('R$', '');
+            valueMask = valueMask.replace(/([0-9]{2})$/gi, '.$1');
+            valueMask = parseFloat(valueMask);
+            setMoneyStorageValue(valueMask)
             console.log(event, "Reprovado");
+             setDisabledState(false);
+             console.log(event,"handle aqui")
         }
 
+       
 
-    };
+    const keyPressValidate = (keyDownEvent) => {
 
-    const [optionState, setOptionState] = useState(true);
-    const optionChangeState = () => {
-        setOptionState(current => !current);
-        /* console.log(optionState,'estadoooooooooo') */
 
-    };
-    const [payModalScreen,setPayModalScreen] = useState(false)
-    const showPayModal = () =>{
+        if ('0123456789'.indexOf(keyDownEvent.key) == -1 &&
+            keyDownEvent.key != 'Backspace' &&
+            keyDownEvent.key != 'Alt' &&
+            keyDownEvent.key != 'Ctrl') {
+            alert("somente numeros sao aceitos nesse campo!");
+            keyDownEvent.preventDefault();
+        };
+    }
+
+    function keyPressSecondValidate(eventoUp) {
+        const formatter = new Intl.NumberFormat('pt-BR', {
+            style: "currency",
+            currency: "BRL",
+
+        });
+        let valueMask = eventoUp.target.value;
+        valueMask = valueMask.replaceAll('.', '').replace(',', '').replaceAll('R$', '');
+        valueMask = valueMask.replace(/([0-9]{2})$/gi, '.$1');
+        valueMask = parseFloat(valueMask);
+        eventoUp.target.value = formatter.format(valueMask).replaceAll('R$', '');
+    }
+
+
+    const [payModalScreen, setPayModalScreen] = useState(false)
+    const showPayModal = () => {
         setPayModalScreen(true);
     };
-    useEffect(() => { console.log(optionState, 'aaaaaaaaaaaa') }, [optionState]); 
+    useEffect(() => { console.log(moneyValueStorage, 'aaaaaaaaaaaa') }, [moneyValueStorage]);
 
 
     if (payModalScreen == true) {
-        return <ApprovedOrReprovedModal optionModalState={optionState}/>
+        return <ApprovedOrReprovedModal optionModalState={optionState} />
     };
+
+    /*    function submitOnClick(event){
+           event.preventDefaut()
+       } */
+
+    /*  const showButton = () =>{
+         setDisabledState(false);
+     } */
     return (
         <PayModalStyle>
             <PayModalSonStyle>
                 <h3>Pagamento para {setUserName}</h3>
-                <div id="elementsPositionStyle">
-                    <input placeholder="R$ 0,00" onChange={(evento)=>handleChange(evento)} type="text" required />
+                <form id="elementsPositionStyle"/*  onSubmit={(eventoSubmit)=>submitOnClick(eventoSubmit)} */ >
+
+                    <input type="text" value={moneyValueStorage} placeholder="R$ 0,00" onChange={(evento) => handleChange(evento)} onKeyDown={(event) => keyPressValidate(event)} onKeyUp={(event) => { keyPressSecondValidate(event) }} required />
                     <select onChange={optionChangeState} >
                         <option value={postApprovedData}>Cartão com o final 111</option>
                         <option value={postDisapprovedData}>Cartão com o final 234</option>
                     </select>
-                    <button onClick={()=>{handlePost();showPayModal();}}>Pagar</button>
-                </div>
+                    <button type="submit" disabled={disabledState} onClick={() => { handlePost(); showPayModal(); }}>Pagar</button>
+                </form>
             </PayModalSonStyle>
         </PayModalStyle>
     );
 
 };
 
-export function ApprovedOrReprovedModal({optionModalState}) {
-   /*  console.log(optionModalState,"modal estado") */
+export function ApprovedOrReprovedModal({ optionModalState }) {
+    /*  console.log(optionModalState,"modal estado") */
     return (
         <PayModalStyle>
-            <ApprovedPayStyle>
-                {optionModalState == true ? "Parabens, o pagamento foi efetuado com sucesso!": "Não foi possivel efetuar o pagamento, o cartão está invalido!"}
-            </ApprovedPayStyle>
+            <ApprovedOrReprovedPayStyle>
+                <h3>Recibo de pagamento</h3>
+                {optionModalState == true ? <p className="dynamicTextClass"> Parabens, o pagamento foi efetuado com sucesso! </p> : <p className="dynamicTextClass"> Não foi possivel efetuar o pagamento, o cartão está invalido! </p>}
+            </ApprovedOrReprovedPayStyle>
         </PayModalStyle>
 
     );
