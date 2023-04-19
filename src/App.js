@@ -9,7 +9,7 @@ function App() {
   return(
     <AppStyled>
         <MainPage/>
-        <UserPage/>
+       {/*  <UserPage/> */}
         {/* <PayModal/> */}
       {/*  <ApprovedModal/>  */}
        {/* <DisapprovedModal/> */}

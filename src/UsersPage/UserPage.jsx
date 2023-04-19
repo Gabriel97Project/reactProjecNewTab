@@ -38,20 +38,20 @@ export default function UserPage() {
             {userData.map((userUnit) => {
 
                 return (
-                    <div id="userMapStyled">
-                        <div id="userPhotoStyled">
+                    <div id="userMapStyled" key={userUnit.id}>
+                        <div id="userPhotoStyled" >
 
                             <img className="userImageStyle" src={userUnit.img} key={userUnit.id}></img>
                         </div>
-                        <div id="userDataStyled">
+                        <div id="userDataStyled" >
                             Nome do usuário: {userUnit.name}
-                            <div className="userNameStyle">
+                            <div className="userNameStyle" key={userUnit.id}>
                                 ID:{userUnit.id} - Username: {userUnit.username}
-
+                                
                             </div>
                         </div>
-                        <div id="userPayButtonStyled">
-                            <button onClick={() => {
+                        <div id="userPayButtonStyled" >
+                            <button  onClick={() => {
                                 handleClickName(userUnit);
                                 handleClickId(userUnit); 
                                 modalTrue(true);

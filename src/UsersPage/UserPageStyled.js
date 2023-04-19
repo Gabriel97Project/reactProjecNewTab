@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 export const UserPageStyled = styled.div`
-    width: 50%;
+    width: 60%;
     
    /*  background-color:blue; */
     display:flex;

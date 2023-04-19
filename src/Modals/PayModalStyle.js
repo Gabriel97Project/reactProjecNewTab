@@ -3,13 +3,18 @@ import styled from "styled-components";
 export const PayModalStyle = styled.div`
     width:100vw;
     height:100vh;
-    background-color:blue;
+     background-color:gray;
     position: fixed;
     top:0px;
-    opacity:0.9;
+    opacity:0.8;
     display:flex;
     align-items:center;
     justify-content:center;
+    #closeModalStyle{
+        position:absolute;
+        top:70px;
+        right:300px;
+    };
 
 `
 
@@ -17,6 +22,8 @@ export const PayModalSonStyle = styled.div`
     width:40%;
     height: 60%;
     background-color:white;
+    border:solid 2px;
+    border-color:black ;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -26,10 +33,11 @@ export const PayModalSonStyle = styled.div`
        width:100%;
        height:60px;
        display:flex;
-       
+       margin:0px;
         align-items:center;
         
-    }
+    };
+
     #elementsPositionStyle{
         display:flex;
         flex-direction:column;
@@ -44,11 +52,9 @@ export const PayModalSonStyle = styled.div`
             height:50px;
             border-radius:5px;
             border-color:#a3a3c2;
-            ::-webkit-input-placeholder { /* Edge */
-            font-size:30px;
-            
-            
-        }
+            ::-webkit-input-placeholder{ 
+            font-size:50px;   
+             };
         };
         select{
             width:70%;
@@ -67,17 +73,20 @@ export const PayModalSonStyle = styled.div`
             background-color:#e6e6e6;
             border-color:gainsboro;
         };
-    }
+     
+    
+    };
 `
 
 export const ApprovedOrReprovedPayStyle = styled.div`
     width:40%;
     height: 200px;
-    background-color:red;
+    background-color:white;
     display:flex;
     flex-direction:column;
     align-items:center;
-    
+    border:solid 2px;
+    border-color:black ;
     h3{
        background-color: #52527a;
        display:flex;
@@ -92,5 +101,7 @@ export const ApprovedOrReprovedPayStyle = styled.div`
     .dynamicTextClass{
         font-size:20px;
         text-align:center;
+        margin-top:40px;
+        font-weight:bold;
     }
 `
