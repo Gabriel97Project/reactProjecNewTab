@@ -3,15 +3,12 @@ import styled from "styled-components";
 
 export const UserPageStyled = styled.div`
     width: 60%;
-    
-   /*  background-color:blue; */
     display:flex;
     flex-direction:column;
     
     #userMapStyled{
         width:100%;
         height:130px;
-  /*       background-color:bisque; */
         display:flex;
         flex-direction:row;
         padding:2px;
@@ -44,7 +41,6 @@ export const UserPageStyled = styled.div`
         .userNameStyle{
             display:flex;
             flex-direction:column;
-        /*     background-color:red; */
         }
     };
     #userPayButtonStyled{

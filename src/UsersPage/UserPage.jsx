@@ -11,8 +11,6 @@ export default function UserPage() {
     const [userId, setUserId] = useState();
 
     const modalTrue = () => {
-
-        /* setModalOpen(current => !current) */
         setModalOpen(true);
     };
     const handleClickName = (userUnit) => {
