@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { UserPageStyled } from "./UserPageStyled";
 import userData from "../json/users.json"
 import PayModal from "../Modals/PayModal";
@@ -16,17 +16,11 @@ export default function UserPage() {
     const handleClickName = (userUnit) => {
         setUserName(()=>userUnit.name)
 
-        console.log("pagina carregou",userName)
     };
     const handleClickId = (userUnit) => {
         setUserId(()=>userUnit.id)
 
-        console.log("pagina carregou",userId)
     };
-    useEffect(() => {
-        console.log(userName)
-        console.log(userId)
-    }, [userName,userId,"usuarios"])
 
     if (modalOpen) {
         return <PayModal setModalOpen={setModalOpen} setUserName={userName} setUserId={userId} />
