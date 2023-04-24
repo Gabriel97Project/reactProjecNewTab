@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ApprovedOrReprovedPayStyle, PayModalSonStyle, PayModalStyle } from "./PayModalStyle";
 import axios from "axios";
 
@@ -7,56 +7,88 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
 
     const [moneyValueStorage, setMoneyStorageValue] = useState(0);
 
-    const postApprovedData = {
+    const [cardCurrentState, setCardCurrentState] /* postApprovedOrReprovedData  */ = useState([{
 
         card_number: '1111111111111111',
         cvv: 789,
         expiry_date: '01/18',
         destination_user_id: setUserId,
-        valueMoney: moneyValueStorage,
+        valueMoney: moneyValueStorage
 
-    };
+    }]) /* ;
 
-    const postDisapprovedData = {
+       {
 
-        card_number: '4111111111111234',
+        card_numberTwo: '4111111111111234',
         cvv: 123,
         expiry_date: '01/20',
         destination_user_id: setUserId,
         valueMoney: moneyValueStorage,
 
-    };
-
+    }];
+ */
+    useEffect(() => {
+        setCardCurrentState(prevState => ({
+          ...prevState,
+          destination_user_id: setUserId,
+          valueMoney: moneyValueStorage
+        }));
+      }, [moneyValueStorage, setUserId]); 
+      /* PrevState é uma função que vai pegar o estado anterior, e entao usamos ...prevState para pegar dados expecificos dentro do nosso objeto
+      dessa forma podemos alterar somente os dados especificos que selecionamps, sem mudar os outros dados sentro do objeto.
+      acima eu estou atualizando os valores do meu id e so meu value money sempre que o estado deles forem mudados, eu tive
+      que fazer isso pois quando estava enviando a resposta para meu endpoint estava sendo enviado o valor inicial do ney moneyValueStorage (era 0);
+      e entao dessa forma toda vez que meu estado do valor mudar, ValueMoney vai ser atualizado no mesmo instante, dessa forma sempre que o endpiont receber
+      minha reposta os dados estaram atualizados. */
     const [optionState, setOptionState] = useState(true);
-    const optionChangeState = () => {
-        setOptionState(current => !current);
+
+    const handleOptionChangeState = (event) => {
+        setSelectedOption(event.target.value)
+        if (event.target.value === "valid") {
+            optionChangeStateToValid();
+        } else if (event.target.value === "invalid") {
+            optionChangeStateToInvalid();
+        }
+       
+    }
+    const optionChangeStateToValid = () => {
+        setCardCurrentState({
+            card_number: '1111111111111111',
+            cvv: 789,
+            expiry_date: '01/18',
+            destination_user_id: setUserId,
+            valueMoney: moneyValueStorage,
+        });
+
+    };
+    const optionChangeStateToInvalid = () => {
+        setCardCurrentState({
+            card_numberTwo: '4111111111111234',
+            cvv: 123,
+            expiry_date: '01/20',
+            destination_user_id: setUserId,
+            valueMoney: moneyValueStorage,
+        });
 
     };
 
     const handlePost = () => {
-        if (optionState == true) {
-            axios.post(' https://run.mocky.io/v3/533cd5d7-63d3-4488-bf8d-4bb8c751c989', postApprovedData)
-                .then(res => {
-                    console.log(res.postApprovedData, "repostaaa");
-                })
-                .catch(err => {
-                    console.log(err);
-                });
 
-        };
-        if (optionState == false) {
-            axios.post(' https://run.mocky.io/v3/533cd5d7-63d3-4488-bf8d-4bb8c751c989', postDisapprovedData)
-                .then(res => {
-                    console.log(res.postDisapprovedData, "repostaaa");
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        };
+        axios.post(' https://run.mocky.io/v3/533cd5d7-63d3-4488-bf8d-4bb8c751c989', cardCurrentState)
+            .then(cardCurrentState => {
+                console.log(cardCurrentState, "repostaaa");
+
+
+            })
+            .catch(err => {
+                console.log(err, "aaa");
+
+            });
+
     };
 
     const [disabledState, setDisabledState] = useState(true);
-
+    const [selectedOption, setSelectedOption] = useState("valid");
 
     const handleChange = (event) => {
 
@@ -64,9 +96,15 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         valueMaskInput = valueMaskInput.replaceAll('.', '').replace(',', '').replaceAll('R$', '');
         valueMaskInput = valueMaskInput.replace(/([0-9]{2})$/gi, '.$1');
         valueMaskInput = parseFloat(valueMaskInput);
-        setMoneyStorageValue(valueMaskInput)
+        
+            setMoneyStorageValue(valueMaskInput);
+
+
         setDisabledState(false);
+
     };
+/* useEffect(()=>{console.log(selectedOption, "eventoooo select")},[selectedOption])  */
+
 
 
 
@@ -93,6 +131,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         valueMaskUp = valueMaskUp.replace(/([0-9]{2})$/gi, '.$1');
         valueMaskUp = parseFloat(valueMaskUp);
         eventoUp.target.value = formatter.format(valueMaskUp).replaceAll('R$', '');
+        
     }
 
     const [payModalScreen, setPayModalScreen] = useState(false)
@@ -116,10 +155,10 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
                 <form id="elementsPositionStyle">
 
                     <input type="text" value={moneyValueStorage == 0 ? "R$ 0,00" : moneyValueStorage} onChange={(evento) => handleChange(evento)}
-                     onKeyDown={(event) => keyPressValidate(event)} onKeyUp={(event) => { keyPressSecondValidate(event) }} required />
-                    <select onChange={optionChangeState} >
-                        <option value={postApprovedData}>Cartão com o final 111</option>
-                        <option value={postDisapprovedData}>Cartão com o final 234</option>
+                        onKeyDown={(event) => keyPressValidate(event)} onKeyUp={(event) => { keyPressSecondValidate(event) }} required />
+                    <select value={selectedOption} onChange={handleOptionChangeState} >
+                        <option value="valid">Cartão com o final 111</option>
+                        <option value="invalid">Cartão com o final 234</option>
                     </select>
                     <button type="submit" disabled={disabledState} onClick={() => { handlePost(); showPayModal(); }}>Pagar</button>
                 </form>
@@ -136,8 +175,8 @@ export function ApprovedOrReprovedModal({ optionModalState }) {
             <ApprovedOrReprovedPayStyle>
                 <h3>Recibo de pagamento</h3>
                 {optionModalState == true ?
-                 <p className="dynamicTextClass"> Parabens, o pagamento foi efetuado com sucesso! </p> :
-                <p className="dynamicTextClass"> Não foi possivel efetuar o pagamento, o cartão está invalido! </p>}
+                    <p className="dynamicTextClass"> Parabens, o pagamento foi efetuado com sucesso! </p> :
+                    <p className="dynamicTextClass"> Não foi possivel efetuar o pagamento, o cartão está invalido! </p>}
             </ApprovedOrReprovedPayStyle>
         </PayModalStyle>
 
