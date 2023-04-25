@@ -15,32 +15,22 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         destination_user_id: setUserId,
         valueMoney: moneyValueStorage
 
-    }]) /* ;
+    }]);
 
-       {
-
-        card_numberTwo: '4111111111111234',
-        cvv: 123,
-        expiry_date: '01/20',
-        destination_user_id: setUserId,
-        valueMoney: moneyValueStorage,
-
-    }];
- */
     useEffect(() => {
         setCardCurrentState(prevState => ({
-          ...prevState,
-          destination_user_id: setUserId,
-          valueMoney: moneyValueStorage
+            ...prevState,
+            destination_user_id: setUserId,
+            valueMoney: moneyValueStorage
         }));
-      }, [moneyValueStorage, setUserId]); 
-      /* PrevState é uma função que vai pegar o estado anterior, e entao usamos ...prevState para pegar dados expecificos dentro do nosso objeto
-      dessa forma podemos alterar somente os dados especificos que selecionamps, sem mudar os outros dados sentro do objeto.
-      acima eu estou atualizando os valores do meu id e so meu value money sempre que o estado deles forem mudados, eu tive
-      que fazer isso pois quando estava enviando a resposta para meu endpoint estava sendo enviado o valor inicial do ney moneyValueStorage (era 0);
-      e entao dessa forma toda vez que meu estado do valor mudar, ValueMoney vai ser atualizado no mesmo instante, dessa forma sempre que o endpiont receber
-      minha reposta os dados estaram atualizados. */
-    const [optionState, setOptionState] = useState(true);
+    }, [moneyValueStorage, setUserId]);
+    /* PrevState é uma função que vai pegar o estado anterior, e entao usamos ...prevState para pegar dados expecificos dentro do nosso objeto
+    dessa forma podemos alterar somente os dados especificos que selecionamps, sem mudar os outros dados sentro do objeto.
+    acima eu estou atualizando os valores do meu id e so meu value money sempre que o estado deles forem mudados, eu tive
+    que fazer isso pois quando estava enviando a resposta para meu endpoint estava sendo enviado o valor inicial do ney moneyValueStorage (era 0);
+    e entao dessa forma toda vez que meu estado do valor mudar, ValueMoney vai ser atualizado no mesmo instante, dessa forma sempre que o endpiont receber
+    minha reposta os dados estaram atualizados. */
+ 
 
     const handleOptionChangeState = (event) => {
         setSelectedOption(event.target.value)
@@ -49,7 +39,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         } else if (event.target.value === "invalid") {
             optionChangeStateToInvalid();
         }
-       
+
     }
     const optionChangeStateToValid = () => {
         setCardCurrentState({
@@ -75,13 +65,13 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
     const handlePost = () => {
 
         axios.post(' https://run.mocky.io/v3/533cd5d7-63d3-4488-bf8d-4bb8c751c989', cardCurrentState)
-            .then(cardCurrentState => {
-                console.log(cardCurrentState, "repostaaa");
+            .then(()=> {
+                console.log(cardCurrentState, "resposta");
 
 
             })
             .catch(err => {
-                console.log(err, "aaa");
+                console.log(err, "resposta");
 
             });
 
@@ -96,14 +86,14 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         valueMaskInput = valueMaskInput.replaceAll('.', '').replace(',', '').replaceAll('R$', '');
         valueMaskInput = valueMaskInput.replace(/([0-9]{2})$/gi, '.$1');
         valueMaskInput = parseFloat(valueMaskInput);
-        
-            setMoneyStorageValue(valueMaskInput);
+
+        setMoneyStorageValue(valueMaskInput);
 
 
         setDisabledState(false);
 
     };
-/* useEffect(()=>{console.log(selectedOption, "eventoooo select")},[selectedOption])  */
+    /* useEffect(()=>{console.log(selectedOption, "eventoooo select")},[selectedOption])  */
 
 
 
@@ -131,7 +121,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         valueMaskUp = valueMaskUp.replace(/([0-9]{2})$/gi, '.$1');
         valueMaskUp = parseFloat(valueMaskUp);
         eventoUp.target.value = formatter.format(valueMaskUp).replaceAll('R$', '');
-        
+
     }
 
     const [payModalScreen, setPayModalScreen] = useState(false)
@@ -140,7 +130,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
     };
 
     if (payModalScreen == true) {
-        return <ApprovedOrReprovedModal optionModalState={optionState} />
+        return <ApprovedOrReprovedModal optionModalState={selectedOption} finalModalClose={modalChange} />
     };
 
     function modalChange() {
@@ -160,7 +150,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
                         <option value="valid">Cartão com o final 111</option>
                         <option value="invalid">Cartão com o final 234</option>
                     </select>
-                    <button type="submit" disabled={disabledState} onClick={() => { handlePost(); showPayModal(); }}>Pagar</button>
+                    <button  disabled={disabledState} onClick={() => { handlePost(); showPayModal(); }}>Pagar</button>
                 </form>
             </PayModalSonStyle>
         </PayModalStyle>
@@ -168,13 +158,16 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
 
 };
 
-export function ApprovedOrReprovedModal({ optionModalState }) {
-
+export function ApprovedOrReprovedModal({ optionModalState, finalModalClose }) {
+    const modalClosing = () =>{
+        finalModalClose(false);
+    }
     return (
         <PayModalStyle>
+            <button id="closingFinalModalStyle" onClick={modalClosing}>X</button>
             <ApprovedOrReprovedPayStyle>
                 <h3>Recibo de pagamento</h3>
-                {optionModalState == true ?
+                {optionModalState == "valid" ?
                     <p className="dynamicTextClass"> Parabens, o pagamento foi efetuado com sucesso! </p> :
                     <p className="dynamicTextClass"> Não foi possivel efetuar o pagamento, o cartão está invalido! </p>}
             </ApprovedOrReprovedPayStyle>

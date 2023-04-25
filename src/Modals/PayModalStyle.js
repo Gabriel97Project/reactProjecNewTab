@@ -6,11 +6,16 @@ export const PayModalStyle = styled.div`
      background-color:gray;
     position: fixed;
     top:0px;
-    opacity:0.8;
+    background-color:rgb(90, 90, 90);
     display:flex;
     align-items:center;
     justify-content:center;
     #closeModalStyle{
+        position:absolute;
+        top:70px;
+        right:300px;
+    };
+    #closingFinalModalStyle{
         position:absolute;
         top:70px;
         right:300px;

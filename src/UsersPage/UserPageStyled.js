@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 
 export const UserPageStyled = styled.div`
-    width: 60%;
+    width: 100%;
     display:flex;
     flex-direction:column;
+    align-items:center ;
     
     #userMapStyled{
-        width:100%;
+        width:60%;
         height:130px;
         display:flex;
         flex-direction:row;
@@ -50,4 +51,12 @@ export const UserPageStyled = styled.div`
         justify-content: center;
         background-color:#33334d;
     };
+    #loadingUsers{
+        width:100vw;
+        height:50vh;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        padding:0px;
+    }
 `

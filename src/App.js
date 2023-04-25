@@ -1,13 +1,17 @@
 import React from "react";
-import MainPage from "./MainPage/MainPage";
-import { AppStyled } from "./AppStyled";
-
+import { AppStyled, TittleAndLogoStyled } from "./AppStyled";
+import UserPage from "./UsersPage/UserPage";
+import NewTabImage from "./images/LogoFrigma.png"
 
 
 function App() {
   return(
     <AppStyled>
-        <MainPage/>
+      <TittleAndLogoStyled>
+         <img src={NewTabImage}></img>
+                <h1>NewTab</h1>
+      </TittleAndLogoStyled>
+        <UserPage/>
     </AppStyled>
 
     

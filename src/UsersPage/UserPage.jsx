@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserPageStyled } from "./UserPageStyled";
-import userData from "../json/users.json"
 import PayModal from "../Modals/PayModal";
+import axios from "axios";
 
 
 
@@ -9,23 +9,41 @@ export default function UserPage() {
     const [modalOpen, setModalOpen] = useState(false);
     const [userName, setUserName] = useState();
     const [userId, setUserId] = useState();
+    const [userData, setUserData] = useState([]);
+
+
+    useEffect(() => {
+        axios.get('https://www.mocky.io/v2/5d531c4f2e0000620081ddce', userData)
+            .then(response => {
+                setUserData(response.data);
+                console.log(userData,'user data');
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
 
     const modalTrue = () => {
         setModalOpen(true);
     };
     const handleClickName = (userUnit) => {
-        setUserName(()=>userUnit.name)
+        setUserName(() => userUnit.name);
 
     };
     const handleClickId = (userUnit) => {
-        setUserId(()=>userUnit.id)
+        setUserId(() => userUnit.id);
 
     };
 
     if (modalOpen) {
         return <PayModal setModalOpen={setModalOpen} setUserName={userName} setUserId={userId} />
     };
-    return (
+    if(userData.length == []){
+        return <UserPageStyled><h2 id='loadingUsers'>⏰ Carregando usuários...</h2></UserPageStyled> 
+           
+        
+    }if(userData.length > 1){
+        return (
         <UserPageStyled>
             {userData.map((userUnit) => {
 
@@ -39,13 +57,13 @@ export default function UserPage() {
                             Nome do usuário: {userUnit.name}
                             <div className="userNameStyle" key={userUnit.id}>
                                 ID:{userUnit.id} - Username: {userUnit.username}
-                                
+
                             </div>
                         </div>
                         <div id="userPayButtonStyled" >
-                            <button  onClick={() => {
+                            <button onClick={() => {
                                 handleClickName(userUnit);
-                                handleClickId(userUnit); 
+                                handleClickId(userUnit);
                                 modalTrue(true);
 
                             }}>Pagar</button>
@@ -60,4 +78,6 @@ export default function UserPage() {
 
         </UserPageStyled>
     )
+    }
+    
 }
