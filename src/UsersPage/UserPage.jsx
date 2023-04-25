@@ -66,16 +66,14 @@ export default function UserPage() {
                                 handleClickId(userUnit);
                                 modalTrue(true);
 
-                            }}>Pagar</button>
+                            }}>
+                                Pagar
+                            </button>
                         </div>
                     </div>
                 )
 
             })}
-
-
-
-
         </UserPageStyled>
     )
     }

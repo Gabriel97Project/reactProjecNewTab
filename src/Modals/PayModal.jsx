@@ -7,7 +7,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
 
     const [moneyValueStorage, setMoneyStorageValue] = useState(0);
 
-    const [cardCurrentState, setCardCurrentState] /* postApprovedOrReprovedData  */ = useState([{
+    const [cardCurrentState, setCardCurrentState] = useState([{
 
         card_number: '1111111111111111',
         cvv: 789,
@@ -93,7 +93,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
         setDisabledState(false);
 
     };
-    /* useEffect(()=>{console.log(selectedOption, "eventoooo select")},[selectedOption])  */
+
 
 
 
@@ -142,7 +142,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
             <PayModalSonStyle>
 
                 <h3>Pagamento para {setUserName}</h3>
-                <form id="elementsPositionStyle">
+                <form id="elementsPositionStyle" onSubmit={() => { handlePost(); showPayModal(); }}>
 
                     <input type="text" value={moneyValueStorage == 0 ? "R$ 0,00" : moneyValueStorage} onChange={(evento) => handleChange(evento)}
                         onKeyDown={(event) => keyPressValidate(event)} onKeyUp={(event) => { keyPressSecondValidate(event) }} required />
@@ -150,7 +150,7 @@ export default function PayModal({ setModalOpen, setUserName, setUserId }) {
                         <option value="valid">Cartão com o final 111</option>
                         <option value="invalid">Cartão com o final 234</option>
                     </select>
-                    <button  disabled={disabledState} onClick={() => { handlePost(); showPayModal(); }}>Pagar</button>
+                    <button  disabled={disabledState}type="submit">Pagar</button>
                 </form>
             </PayModalSonStyle>
         </PayModalStyle>
