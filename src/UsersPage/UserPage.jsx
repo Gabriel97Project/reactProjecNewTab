@@ -38,11 +38,11 @@ export default function UserPage() {
     if (modalOpen) {
         return <PayModal setModalOpen={setModalOpen} setUserName={userName} setUserId={userId} />
     };
-    if(userData.length == []){
+/*     if(userData.length == []){
         return <UserPageStyled><h2 id='loadingUsers'>⏰ Carregando usuários...</h2></UserPageStyled> 
            
         
-    }if(userData.length > 1){
+    }if(userData.length > 1){ */
         return (
         <UserPageStyled>
             {userData.map((userUnit) => {
@@ -78,4 +78,4 @@ export default function UserPage() {
     )
     }
     
-}
+/* } */
